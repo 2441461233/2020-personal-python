@@ -3,28 +3,36 @@ import os
 import argparse
 
 class Data:
-    def __init__(self, dict_address: int = None, reload: int = 0):
+    def __init__(self, dict_address: str = None, reload: int = 0):
+        # 需要重新加载数据时
         if reload == 1:
-            self.__init(dict_address)
+            self.dataLoadIn(dict_address)
+        # 数据地址为空且无加载数据时
         if dict_address is None and not os.path.exists('1.json') and not os.path.exists('2.json') and not os.path.exists('3.json'):
             raise RuntimeError('error: init failed')
+        # 某用户的某事件数量
         x = open('1.json', 'r', encoding='utf-8').read()
         self.__4Events4PerP = json.loads(x)
+        # 某项目的某事件数量
         x = open('2.json', 'r', encoding='utf-8').read()
         self.__4Events4PerR = json.loads(x)
+        # 某用户在某项目的某事件数量
         x = open('3.json', 'r', encoding='utf-8').read()
         self.__4Events4PerPPerR = json.loads(x)
 
-    def __init(self, dict_address: str):
+    def dataLoadIn(self, dict_address: str):
         json_list = []
+        # 遍历文件夹
         for root, dic, files in os.walk(dict_address):
             for f in files:
+                # 处理目标json文件
                 if f[-5:] == '.json':
                     json_path = f
                     x = open(dict_address+'\\'+json_path,
                              'r', encoding='utf-8').read()
+                    # json文件转换为数组, 元素为一行json格式的数据
                     str_list = [_x for _x in x.split('\n') if len(_x) > 0]
-                    for i, _str in enumerate(str_list):
+                    for _str in str_list:
                         try:
                             json_list.append(json.loads(_str))
                         except:
@@ -97,15 +105,17 @@ class Run:
         self.parser = argparse.ArgumentParser()
         self.data = None
         self.argInit()
-        print(self.analyse())
+        print(self.orderAnalyze())
 
     def argInit(self):
+        # 初始化参数
         self.parser.add_argument('-i', '--init')
         self.parser.add_argument('-u', '--user')
         self.parser.add_argument('-r', '--repo')
         self.parser.add_argument('-e', '--event')
 
-    def analyse(self):
+    def orderAnalyze(self):
+        # 初始化
         if self.parser.parse_args().init:
             self.data = Data(self.parser.parse_args().init, 1)
             return 0
