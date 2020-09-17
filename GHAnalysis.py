@@ -20,7 +20,7 @@ class Data:
         x = open('user_repo.json', 'r', encoding='utf-8').read()
         self.__4Events4PerPPerR = json.loads(x)
 
-    def dataLoadIn(self, dict_address: str):
+    def dataLoadIn(self, dict_address: str) -> bool: 
         json_list = []
         # 遍历文件夹
         for root, dic, files in os.walk(dict_address):
@@ -38,9 +38,9 @@ class Data:
                         except:
                             pass
         records = self.__listOfNestedDict2ListOfDict(json_list)
-        self.__4Events4PerP = {}
-        self.__4Events4PerR = {}
-        self.__4Events4PerPPerR = {}
+        self.__4Events4PerP = {} # 存 某用户某事件
+        self.__4Events4PerR = {} # 存 某项目某事件
+        self.__4Events4PerPPerR = {} # 存 某用户某项目某事件
         for i in records:
             if not self.__4Events4PerP.get(i['actor__login'], 0):
                 self.__4Events4PerP.update({i['actor__login']: {}})
@@ -55,6 +55,7 @@ class Data:
                 self.__4Events4PerPPerR[i['actor__login']].update({i['repo__name']: {}})
             self.__4Events4PerPPerR[i['actor__login']][i['repo__name']][i['type']
                                                           ] = self.__4Events4PerPPerR[i['actor__login']][i['repo__name']].get(i['type'], 0)+1
+        # 写入保存查询文件
         with open('user.json', 'w', encoding='utf-8') as f:
             json.dump(self.__4Events4PerP,f)
         with open('repo.json', 'w', encoding='utf-8') as f:
@@ -121,16 +122,20 @@ class Run:
             self.data = Data(self.parser.parse_args().init, 1)
             return 0
         else:
+            # 无数据重新加载
             if self.data is None:
                 self.data = Data()
             if self.parser.parse_args().event:
                 if self.parser.parse_args().user:
+                    # 查询某用户在某项目某事件
                     if self.parser.parse_args().repo:
                         res = self.data.getEventsUsersAndRepos(
                             self.parser.parse_args().user, self.parser.parse_args().repo, self.parser.parse_args().event)
+                    # 查询某用户某事件
                     else:
                         res = self.data.getEventsUsers(
                             self.parser.parse_args().user, self.parser.parse_args().event)
+                # 查询某项目某事件
                 elif self.parser.parse_args().repo:
                     res = self.data.getEventsRepos(
                         self.parser.parse_args().reop, self.parser.parse_args().event)
