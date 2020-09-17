@@ -1,0 +1,60 @@
+制作一个程序统计和分析 GitHub 的用户行为数据。
+
+数据来源
+GH Archive
+GH Archive 是一个 GitHub 归档数据的下载地址，它提供了从 2011 年至今的 GitHub 活动数据。
+点击下载示例数据
+
+题目要求
+本题关注以下这几种信息类型：
+PushEvent
+IssueCommentEvent
+IssuesEvent
+PullRequestEvent
+
+需要统计以下内容
+（基础）个人的 4 种事件的数量。
+（基础）每一个项目的 4 种事件的数量。
+（提高）每一个人在每一个项目的 4 种事件的数量。
+
+编码要求
+使用 C++、Java、Python 中任一种完成任务。
+制定合适的代码规范，进行测试。
+使用 Git 进行版本控制。
+
+评测环境
+GitHub Actions 具体配置自己搜索。
+
+格式要求
+
+执行文件为 GHAnalysis，拓展名依所选语言而定，注意 Linux 操作系统文件系统区分大小写。
+
+初始化
+C++：GHAnalysis <--init|-i> <path to data>
+Java：java -Dfile.encoding=UTF-8 -jar GHAnalysis.jar <--init|-i> <path to data>
+Python: python3 GHAnalysis.py <--init|-i> <path to data>
+
+查某用户的某事件数量运行格式：
+C++：GHAnalysis <-u|--user> user <-e|--event> <PushEvent|IssueCommentEvent|IssuesEvent|PullRequestEvent>
+Java：java -Dfile.encoding=UTF-8 -jar GHAnalysis.jar <-u|--user> user <-e|--event> <PushEvent|IssueCommentEvent|IssuesEvent|PullRequestEvent>
+Python: python3 GHAnalysis.py <-u|--user> user <-e|--event> <PushEvent|IssueCommentEvent|IssuesEvent|PullRequestEvent>
+
+查询某项目的某事件数量运行格式：
+C++：GHAnalysis user/repo <-r|--repo> user/repo <-e|--event> <push|IssueCommentEvent|IssuesEvent|PullRequestEvent>
+Java：java -Dfile.encoding=UTF-8 -jar GHAnalysis.jar <-r|--repo> user/repo <-e|--event> <PushEvent|IssueCommentEvent|IssuesEvent|PullRequestEvent>
+Python: python3 GHAnalysis.py <-r|--repo> user/repo <-e|--event> <PushEvent|IssueCommentEvent|IssuesEvent|PullRequestEvent>
+
+查询某用户在某项目的某事件数量运行格式：
+C++：GHAnalysis <-u|--user> user <-r|--repo> user/repo <-e|--event> <PushEvent|IssueCommentEvent|IssuesEvent|PullRequestEvent>
+Java：java -Dfile.encoding=UTF-8 -jar GHAnalysis.jar <-u|--user> user <-r|--repo> user/repo <-e|--event> <PushEvent|IssueCommentEvent|IssuesEvent|PullRequestEvent>
+Python: python3 GHAnalysis.py <-u|--user> user <-r|--repo> user/repo <-e|--event> <PushEvent|IssueCommentEvent|IssuesEvent|PullRequestEvent>
+
+输出格式为单独的数字。
+
+运行格式
+会先运行一次初始化指令，然后在运行其他指令。
+多个参数顺序不一定一致。
+<path to data> 是一个文件夹。
+
+数据范围
+数据文本小于 10GB。

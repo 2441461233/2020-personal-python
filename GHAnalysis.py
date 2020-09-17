@@ -8,16 +8,16 @@ class Data:
         if reload == 1:
             self.dataLoadIn(dict_address)
         # 数据地址为空且无加载数据时
-        if dict_address is None and not os.path.exists('1.json') and not os.path.exists('2.json') and not os.path.exists('3.json'):
+        if dict_address is None and not os.path.exists('user.json') and not os.path.exists('repo.json') and not os.path.exists('user_repo.json'):
             raise RuntimeError('error: init failed')
         # 某用户的某事件数量
-        x = open('1.json', 'r', encoding='utf-8').read()
+        x = open('user.json', 'r', encoding='utf-8').read()
         self.__4Events4PerP = json.loads(x)
         # 某项目的某事件数量
-        x = open('2.json', 'r', encoding='utf-8').read()
+        x = open('repo.json', 'r', encoding='utf-8').read()
         self.__4Events4PerR = json.loads(x)
         # 某用户在某项目的某事件数量
-        x = open('3.json', 'r', encoding='utf-8').read()
+        x = open('user_repo.json', 'r', encoding='utf-8').read()
         self.__4Events4PerPPerR = json.loads(x)
 
     def dataLoadIn(self, dict_address: str):
@@ -55,12 +55,13 @@ class Data:
                 self.__4Events4PerPPerR[i['actor__login']].update({i['repo__name']: {}})
             self.__4Events4PerPPerR[i['actor__login']][i['repo__name']][i['type']
                                                           ] = self.__4Events4PerPPerR[i['actor__login']][i['repo__name']].get(i['type'], 0)+1
-        with open('1.json', 'w', encoding='utf-8') as f:
+        with open('user.json', 'w', encoding='utf-8') as f:
             json.dump(self.__4Events4PerP,f)
-        with open('2.json', 'w', encoding='utf-8') as f:
+        with open('repo.json', 'w', encoding='utf-8') as f:
             json.dump(self.__4Events4PerR,f)
-        with open('3.json', 'w', encoding='utf-8') as f:
+        with open('user_repo.json', 'w', encoding='utf-8') as f:
             json.dump(self.__4Events4PerPPerR,f)
+        return True
 
     def __parseDict(self, d: dict, prefix: str):
         _d = {}
